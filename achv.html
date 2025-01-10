@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLRIT Sports Achievements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0bdfee;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        section#achievements {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            color: #0ce7f7;
+        }
+
+        .achievement {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 5px solid #04dfea;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement h3 {
+            color: #03d9e8;
+            font-size: 1.6em;
+        }
+
+        .achievement p {
+            font-size: 1.1em;
+            margin: 5px 0;
+        }
+
+        footer {
+            background-color: #0ce8d6;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            section#achievements {
+                padding: 10px;
+            }
+
+            .achievement h3 {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MLRIT Sports Achievements</h1>
+    </header>
+
+    <section id="achievements">
+        <h2>Our Sports Achievements</h2>
+        
+        <div class="achievement">
+            <h3>MRITS Inter College Sports Fest</h3>
+            <p><strong>Event:</strong> Volleyball (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>NREC Inter College Sports Fest</h3>
+            <p><strong>Event:</strong> Volleyball (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>Anurag University Sports Meet</h3>
+            <p><strong>Event:</strong> Volleyball (Men) - Winner</p>
+            <p><strong>Event:</strong> Kabaddi (Men) - Winner</p>
+            <p><strong>Event:</strong> Basketball (Men) - Winner</p>
+            <p><strong>Event:</strong> Basketball (Women) - Runner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>KLUniversity Vijayawada Sports Meet</h3>
+            <p><strong>Event:</strong> Kabaddi (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>BITS Pilani University</h3>
+            <p><strong>Event:</strong> Kabaddi (Men) - Winner</p>
+            <p><strong>Event:</strong> Basketball (Men) - Runner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>Arora Sports Fest 2023</h3>
+            <p><strong>Event:</strong> Kabaddi (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>VJIT Sports Fest 2K23</h3>
+            <p><strong>Event:</strong> Handball (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>NEFT College</h3>
+            <p><strong>Event:</strong> Kabaddi (Men) - Winner</p>
+            <p><strong>Event:</strong> Volleyball (Men) - Winner</p>
+            <p><strong>Event:</strong> Basketball (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>Malla Reddy Pharmacy</h3>
+            <p><strong>Event:</strong> Kabaddi (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>Tech Mahindra</h3>
+            <p><strong>Event:</strong> Badminton (Women) - Runner</p>
+            <p><strong>Event:</strong> Badminton (Men) - Runner</p>
+            <p><strong>Event:</strong> Volleyball (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>MREM Sports Fest</h3>
+            <p><strong>Event:</strong> Volleyball (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>CMR Sports Fest</h3>
+            <p><strong>Event:</strong> Football (Men) - Winner</p>
+        </div>
+
+        <div class="achievement">
+            <h3>Gokaraju Rangaraju Sports Fest</h3>
+            <p><strong>Event:</strong> Basketball (Men) - Runner</p>
+            <p><strong>Event:</strong> Basketball (Women) - Winner</p>
+            <p><strong>Event:</strong> Volleyball (Men) - Winner</p>
+            <p><strong>Event:</strong> Badminton (Women) - Runner</p>
+            <p><strong>Event:</strong> Badminton (Men) - Runner</p>
+        </div>
+    </section>
+
+   
+
+    <script>
+        // JavaScript for any interactivity, animations, or dynamic content
+        document.addEventListener("DOMContentLoaded", function() {
+            // Example: Highlighting achievements if clicked
+            const achievements = document.querySelectorAll('.achievement');
+            
+            achievements.forEach(achievement => {
+                achievement.addEventListener('click', () => {
+                    achievement.style.backgroundColor = '#e0f7fa'; // Highlight clicked achievement
+                });
+            });
+        });
+    </script>
+</body>
+</html>
