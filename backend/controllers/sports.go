@@ -1,8 +1,11 @@
 package controllers
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 	"os"
+	"sportslotbooker/model"
 	"sportslotbooker/services"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,7 +20,25 @@ type SportsControllers struct {
 	service services.Services
 }
 
-func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request) {}
+func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "Application/json")
+	var booking model.Booking
+	err := json.NewDecoder(r.Body).Decode(&booking)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Println("bad form ", booking)
+		return
+	}
+	err = s.service.Create(booking)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusAccepted)
+	w.Write([]byte("created a new booking"))
+	return
+
+}
 func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request) {}
 
 func NewController(client *mongo.Client) Controllers {
