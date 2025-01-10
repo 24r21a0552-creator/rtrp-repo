@@ -35,7 +35,7 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 		return
 	}
 	w.WriteHeader(http.StatusAccepted)
-	w.Write([]byte("created a new booking"))
+	w.Write([]bytes("created a new booking"))
 	return
 
 }
