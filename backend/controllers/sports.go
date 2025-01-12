@@ -22,24 +22,52 @@ type SportsControllers struct {
 
 func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "Application/json")
-	var booking model.Booking
+	type form struct {
+		Roll_no    string `json:"roll_no,omitempty"`
+		Email      string `json:"email,omitempty"`
+		Department string `json:"department,omitempty"`
+		Sport      string `json:"sport,omitempty"`
+		Date       string `json:"date,omitempty"`
+		Time       string `json:"time,omitempty"`
+		Venue      string `json:"venue,omitempty"`
+	}
+	var booking form
+
 	err := json.NewDecoder(r.Body).Decode(&booking)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		log.Println("bad form ", booking)
 		return
 	}
-	err = s.service.Create(booking)
+	newBooking := model.NewBooking(booking.Roll_no, booking.Email, booking.Department, booking.Sport, booking.Date, booking.Time, booking.Venue)
+
+	err = s.service.Create(newBooking)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusAccepted)
-	w.Write([]bytes("created a new booking"))
-	return
-
+	w.Write([]byte("created a new booking"))
 }
-func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request) {}
+
+func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "Application/json")
+	var cancelling model.Cancellation
+	err := json.NewDecoder(r.Body).Decode(&cancelling)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Println("bad form ", cancelling)
+		return
+	}
+	err = s.service.Cancel(cancelling)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusAccepted)
+	w.Write([]byte("cancelled booking"))
+}
 
 func NewController(client *mongo.Client) Controllers {
 	db := client.Database(os.Getenv("DATABASE"))

@@ -10,6 +10,12 @@ type Booking struct {
 	venue      string `json:"venue,omitempty"`
 }
 
+type Cancellation struct {
+	Roll_no string `json:"roll_no,omitempty"`
+	Sport   string `json:"sport,omitempty"`
+	Date    string `json:"date,omitempty"`
+}
+
 func NewBooking(roll, mail, dept, sport, date, time, venue string) Booking {
 	return Booking{
 		roll_no:    roll,
