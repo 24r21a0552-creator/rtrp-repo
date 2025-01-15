@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -45,13 +46,18 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 	fmt.Println("creating a new booking ", newBooking)
 	err = s.service.Create(newBooking)
 	if err != nil {
+		if errors.Is(err, errors.New("already a registration exists over this roll")) {
+			w.WriteHeader(http.StatusLocked)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	fmt.Println("new booking created")
 	confirmation := fmt.Sprintf("Roll Number: %s\nSport: %s\nDate: %s\nVenue: %s\n", booking.Roll_no, booking.Sport, booking.Date, booking.Venue)
-	err = middleware.EmailConfirmation(booking.Email, confirmation,"booking")
+	err = middleware.EmailConfirmation(booking.Email, confirmation, "booking")
 	if err != nil {
+
 		w.WriteHeader(http.StatusConflict)
 		log.Println("email error ", err)
 		return
@@ -75,7 +81,13 @@ func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request
 		return
 	}
 	confirmation := fmt.Sprintf("Roll Number: %s\nSport: %s\nDate: %s\n", cancelling.Roll_no, cancelling.Sport, cancelling.Date)
-	err = middleware.EmailConfirmation(cancelling.Email, confirmation,"cancelling")
+	err = middleware.EmailConfirmation(cancelling.Email, confirmation, "cancelling")
+	if err != nil {
+
+		w.WriteHeader(http.StatusConflict)
+		log.Println("email error ", err)
+		return
+	}
 	fmt.Println("completed cancellation")
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("cancelled booking"))

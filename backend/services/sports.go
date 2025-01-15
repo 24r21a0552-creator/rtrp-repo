@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 	"log"
 	"sportslotbooker/model"
 
@@ -25,7 +26,13 @@ func NewService(coll *mongo.Collection) Services {
 }
 
 func (c *SportsServices) Create(booking model.Booking) error {
-
+	roll := booking.Roll_no
+	filter := bson.D{ {Key:"roll_no",Value:roll}}
+	res := c.collection.FindOne(context.TODO(),filter) 
+	if res!=nil{
+		log.Println("Already a registration exists ")
+		return errors.New("already a registration exists over this roll")
+	}
 	_, err := c.collection.InsertOne(context.TODO(), booking)
 	if err != nil {
 		log.Println("error during insertion into the db: ", err)
