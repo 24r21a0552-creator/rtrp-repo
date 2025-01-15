@@ -11,6 +11,7 @@ type Booking struct {
 }
 
 type Cancellation struct {
+	Email   string `json:"roll_no,omitempty"`
 	Roll_no string `json:"roll_no,omitempty"`
 	Sport   string `json:"sport,omitempty"`
 	Date    string `json:"date,omitempty"`

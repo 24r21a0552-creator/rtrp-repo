@@ -50,7 +50,7 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 	}
 	fmt.Println("new booking created")
 	confirmation := fmt.Sprintf("Roll Number: %s\nSport: %s\nDate: %s\nVenue: %s\n", booking.Roll_no, booking.Sport, booking.Date, booking.Venue)
-	err = middleware.EmailConfirmation(booking.Email, confirmation)
+	err = middleware.EmailConfirmation(booking.Email, confirmation,"booking")
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		log.Println("email error ", err)
@@ -74,6 +74,8 @@ func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	confirmation := fmt.Sprintf("Roll Number: %s\nSport: %s\nDate: %s\n", cancelling.Roll_no, cancelling.Sport, cancelling.Date)
+	err = middleware.EmailConfirmation(cancelling.Email, confirmation,"cancelling")
 	fmt.Println("completed cancellation")
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("cancelled booking"))

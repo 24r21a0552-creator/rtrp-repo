@@ -47,16 +47,24 @@ func DBConnection() *mongo.Client {
 	return mongoClient
 }
 
-func EmailConfirmation(reciever, response string) error {
+func EmailConfirmation(reciever, response, operation string) error {
 
 	from := "hiimindra12345@gmail.com"
 	password := "jtnu dbbl cqvn xetv"
 	to := []string{reciever}
 	auth := smtp.PlainAuth("smtp", from, password, "smtp.gmail.com")
-	subject := "Subject: Booking Confirmation\n"
-	body := "Your booking has been confirmed. The following are the details:\n" + response
-	message := []byte(subject + "\n" + body)
+	var subject, body string
+	if operation == "booking" {
+		subject = "Subject: Booking Confirmation\n"
+		body = "Your booking has been confirmed. The following are the details:\n" + response
 
+	}
+	if operation == "cancelling" {
+		subject = "Subject: Cancel Confirmation\n"
+		body = "Your booking has been Cancelled. Details:\n" + response
+	}
+
+	message := []byte(subject + "\n" + body)
 	smtpAddress := "smtp.gmail.com"
 	smtpPort := "587"
 	err := smtp.SendMail(smtpAddress+":"+smtpPort, auth, from, to, message)
