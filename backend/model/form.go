@@ -1,13 +1,13 @@
 package model
 
 type Booking struct {
-	roll_no    string `json:"roll_no,omitempty"`
-	email      string `json:"email,omitempty"`
-	department string `json:"department,omitempty"`
-	sport      string `json:"sport,omitempty"`
-	date       string `json:"date,omitempty"`
-	time       string `json:"time,omitempty"`
-	venue      string `json:"venue,omitempty"`
+	Roll_no    string `json:"roll_no,omitempty"`
+	Email      string `json:"email,omitempty"`
+	Department string `json:"department,omitempty"`
+	Sport      string `json:"sport,omitempty"`
+	Date       string `json:"date,omitempty"`
+	Time       string `json:"time,omitempty"`
+	Venue      string `json:"venue,omitempty"`
 }
 
 type Cancellation struct {
@@ -18,11 +18,11 @@ type Cancellation struct {
 
 func NewBooking(roll, mail, dept, sport, date, time, venue string) Booking {
 	return Booking{
-		roll_no:    roll,
-		email:      mail,
-		department: dept,
-		sport:      sport,
-		date:       date,
-		venue:      venue,
+		Roll_no:    roll,
+		Email:      mail,
+		Department: dept,
+		Sport:      sport,
+		Date:       date,
+		Venue:      venue,
 	}
 }

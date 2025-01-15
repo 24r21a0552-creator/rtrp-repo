@@ -6,6 +6,7 @@ import (
 	"sportslotbooker/middleware"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -15,5 +16,16 @@ func main() {
 	router.HandleFunc("/CreateBooking", con.CreateBooking).Methods("POST")
 	router.HandleFunc("/CancelBooking", con.CancelBooking).Methods("POST")
 
-	http.ListenAndServe(":3000", router)
+	// Enable CORS
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	// Use the CORS middleware
+	handler := c.Handler(router)
+
+	http.ListenAndServe(":3000", handler)
 }
