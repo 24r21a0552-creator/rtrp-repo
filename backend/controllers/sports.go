@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"sportslotbooker/middleware"
 	"sportslotbooker/model"
 	"sportslotbooker/services"
 
@@ -32,7 +34,6 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 		Venue      string `json:"venue,omitempty"`
 	}
 	var booking form
-
 	err := json.NewDecoder(r.Body).Decode(&booking)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -44,6 +45,13 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 	err = s.service.Create(newBooking)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	confirmation := fmt.Sprintf("Your booking has been confirmed the following are the details: \n Roll Number : %s\n Sport: %s\n	Date: %s\n Venue: %s\n", booking.Roll_no, booking.Sport, booking.Department, booking.Venue)
+	err = middleware.EmailConfirmation(booking.Email, confirmation)
+	if err != nil {
+		w.WriteHeader(http.StatusConflict)
+		log.Println("email error ", err)
 		return
 	}
 	w.WriteHeader(http.StatusAccepted)

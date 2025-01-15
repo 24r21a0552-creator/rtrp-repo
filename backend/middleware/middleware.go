@@ -3,12 +3,13 @@ package middleware
 import (
 	"context"
 	"log"
+	"net/smtp"
 	"os"
 
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func DBConnection() *mongo.Client {
@@ -29,4 +30,22 @@ func DBConnection() *mongo.Client {
 	}
 	log.Println("Connection Established")
 	return mongoClient
+}
+
+func EmailConfirmation(reciever, response string) error {
+
+	from := "nbkreddy12345@gmail.com"
+	password := "6302503241"
+	message := []byte(response)
+	to := []string{reciever}
+	auth := smtp.PlainAuth("", from, password, "smtp.gmail.com")
+
+	smtpAddress := "smtp.gmail.com"
+	smtpPort := "587"
+	err := smtp.SendMail(smtpAddress+":"+smtpPort, auth, from, to, message)
+	if err != nil {
+		return err
+	}
+	return nil
+
 }
