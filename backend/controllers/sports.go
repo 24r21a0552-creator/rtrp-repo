@@ -63,17 +63,18 @@ func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request
 	w.Header().Set("Content-type", "Application/json")
 	var cancelling model.Cancellation
 	err := json.NewDecoder(r.Body).Decode(&cancelling)
-
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		log.Println("bad form ", cancelling)
 		return
 	}
+	fmt.Println("new cancellation ", cancelling)
 	err = s.service.Cancel(cancelling)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	fmt.Println("completed cancellation")
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("cancelled booking"))
 }
