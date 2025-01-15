@@ -27,12 +27,10 @@ func NewService(coll *mongo.Collection) Services {
 func (c *SportsServices) Create(booking model.Booking) error {
 
 	_, err := c.collection.InsertOne(context.TODO(), booking)
-
 	if err != nil {
-		log.Println("error during insertion into the db ")
+		log.Println("error during insertion into the db: ", err)
 		return err
 	}
-	// send e-mail
 	return nil
 
 }

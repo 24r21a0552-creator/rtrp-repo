@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"log"
+	"net/http"
 	"net/smtp"
 	"os"
 
@@ -11,6 +12,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
+
+func CorsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 func DBConnection() *mongo.Client {
 	err := godotenv.Load()
@@ -34,11 +49,13 @@ func DBConnection() *mongo.Client {
 
 func EmailConfirmation(reciever, response string) error {
 
-	from := "nbkreddy12345@gmail.com"
-	password := "6302503241"
-	message := []byte(response)
+	from := "hiimindra12345@gmail.com"
+	password := "jtnu dbbl cqvn xetv"
 	to := []string{reciever}
-	auth := smtp.PlainAuth("", from, password, "smtp.gmail.com")
+	auth := smtp.PlainAuth("smtp", from, password, "smtp.gmail.com")
+	subject := "Subject: Booking Confirmation\n"
+	body := "Your booking has been confirmed. The following are the details:\n" + response
+	message := []byte(subject + "\n" + body)
 
 	smtpAddress := "smtp.gmail.com"
 	smtpPort := "587"

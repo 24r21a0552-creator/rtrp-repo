@@ -24,6 +24,7 @@ type SportsControllers struct {
 
 func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "Application/json")
+
 	type form struct {
 		Roll_no    string `json:"roll_no,omitempty"`
 		Email      string `json:"email,omitempty"`
@@ -41,13 +42,14 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 		return
 	}
 	newBooking := model.NewBooking(booking.Roll_no, booking.Email, booking.Department, booking.Sport, booking.Date, booking.Time, booking.Venue)
-
+	fmt.Println("creating a new booking ", newBooking)
 	err = s.service.Create(newBooking)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	confirmation := fmt.Sprintf("Your booking has been confirmed the following are the details: \n Roll Number : %s\n Sport: %s\n	Date: %s\n Venue: %s\n", booking.Roll_no, booking.Sport, booking.Department, booking.Venue)
+	fmt.Println("new booking created")
+	confirmation := fmt.Sprintf("Roll Number: %s\nSport: %s\nDate: %s\nVenue: %s\n", booking.Roll_no, booking.Sport, booking.Date, booking.Venue)
 	err = middleware.EmailConfirmation(booking.Email, confirmation)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
@@ -57,7 +59,6 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("created a new booking"))
 }
-
 func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "Application/json")
 	var cancelling model.Cancellation
