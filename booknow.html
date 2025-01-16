@@ -203,6 +203,8 @@
           .then((response) => {
             if (response.status === 202) {
               return response.text();
+            } else if (response.status === 423) {
+              throw new Error("Already Booking exists for this student");
             } else {
               throw new Error("Failed to create booking");
             }

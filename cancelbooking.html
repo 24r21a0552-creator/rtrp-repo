@@ -132,7 +132,8 @@
 
     <script>
       document.getElementById("cancelBtn").addEventListener("click", () => {
-        const rollno = document.getElementById("rollno").value.trim();
+        const rollno = document.getElementById("rollno").value;
+        const email = document.getElementById("email").value;
         const sport = document.getElementById("sport").value;
         const date = document.getElementById("date").value;
 
@@ -144,6 +145,7 @@
         }
 
         const cancellationData = {
+          email: email,
           roll_no: rollno,
           sport: sport,
           date: date,
@@ -159,8 +161,10 @@
           .then((response) => {
             if (response.status === 202) {
               return response.text();
+            } else if (response.status === 423) {
+              throw new Error("No Such Booking exists for this student");
             } else {
-              throw new Error("Failed to cancel booking");
+              throw new Error("Failed to create booking");
             }
           })
           .then((data) => {

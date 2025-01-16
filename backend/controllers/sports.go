@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -18,7 +17,6 @@ type Controllers interface {
 	CreateBooking(w http.ResponseWriter, r *http.Request)
 	CancelBooking(w http.ResponseWriter, r *http.Request)
 }
-
 type SportsControllers struct {
 	service services.Services
 }
@@ -44,9 +42,9 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 	}
 	newBooking := model.NewBooking(booking.Roll_no, booking.Email, booking.Department, booking.Sport, booking.Date, booking.Time, booking.Venue)
 	fmt.Println("creating a new booking ", newBooking)
-	err = s.service.Create(newBooking)
-	if err != nil {
-		if errors.Is(err, errors.New("already a registration exists over this roll")) {
+	check, err := s.service.Create(newBooking)
+	if check || err != nil {
+		if check {
 			w.WriteHeader(http.StatusLocked)
 			return
 		}
@@ -57,7 +55,6 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 	confirmation := fmt.Sprintf("Roll Number: %s\nSport: %s\nDate: %s\nVenue: %s\n", booking.Roll_no, booking.Sport, booking.Date, booking.Venue)
 	err = middleware.EmailConfirmation(booking.Email, confirmation, "booking")
 	if err != nil {
-
 		w.WriteHeader(http.StatusConflict)
 		log.Println("email error ", err)
 		return
@@ -65,6 +62,7 @@ func (s *SportsControllers) CreateBooking(w http.ResponseWriter, r *http.Request
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("created a new booking"))
 }
+
 func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "Application/json")
 	var cancelling model.Cancellation
@@ -75,8 +73,12 @@ func (s *SportsControllers) CancelBooking(w http.ResponseWriter, r *http.Request
 		return
 	}
 	fmt.Println("new cancellation ", cancelling)
-	err = s.service.Cancel(cancelling)
-	if err != nil {
+	check, err := s.service.Cancel(cancelling)
+	if check || err != nil {
+		if check {
+			w.WriteHeader(http.StatusLocked)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
